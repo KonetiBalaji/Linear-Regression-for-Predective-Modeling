@@ -1,93 +1,118 @@
 import pandas as pd
-
-# Load the dataset
-df = pd.read_csv("dataset/student/student-mat.csv", sep=';')  # Make sure it's in your working directory
-
-# Display top 5 rows
-print(df.head())
-
-# Get basic info
-print(df.info())
-
-# Summary statistics
-print(df.describe())
-
-# Check for missing values
-print(df.isnull().sum())
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, PolynomialFeatures, StandardScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
-import numpy as np
-
-# Step 1: Select features and target
-selected_features = ['sex', 'age', 'address', 'studytime', 'failures', 'schoolsup', 'higher', 'internet', 'G1', 'G2']
-X = df[selected_features]
-y = df['G3']
-
-# Step 2: Split numerical and categorical columns
-numerical_cols = ['age', 'studytime', 'failures', 'G1', 'G2']
-categorical_cols = ['sex', 'address', 'schoolsup', 'higher', 'internet']
-
-# Step 3: Preprocessing pipeline
-preprocessor = ColumnTransformer(
-    transformers=[
-        ('num', 'passthrough', numerical_cols),
-        ('cat', OneHotEncoder(drop='first'), categorical_cols)
-    ])
-
-# Step 4: Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-print("Preprocessing and data split complete!")
-
-from sklearn.pipeline import Pipeline
-from sklearn.linear_model import LinearRegression
-
-# Create a pipeline with preprocessor and model
-model = Pipeline(steps=[
-    ('preprocessor', preprocessor),
-    ('regressor', LinearRegression())
-])
-
-# Fit the model
-model.fit(X_train, y_train)
-
-print("Model training complete!")
-
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-# Predict on test set
-y_pred = model.predict(X_test)
+def load_and_preprocess_data(filepath):
+    # Load dataset
+    df = pd.read_csv("dataset/student/student-mat.csv", sep=';')
 
-# Evaluation metrics
-mae = mean_absolute_error(y_test, y_pred)
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+    # Feature engineering
+    df['G_avg'] = (df['G1'] + df['G2']) / 2
+    df['alcohol_use'] = df['Dalc'] + df['Walc']
+    df['parent_edu'] = (df['Medu'] + df['Fedu']) / 2
 
-print(f"Mean Absolute Error (MAE): {mae:.2f}")
-print(f"Mean Squared Error (MSE): {mse:.2f}")
-print(f"R² Score: {r2:.2f}")
+    # Selected features
+    features = ['age', 'studytime', 'failures', 'G_avg', 'alcohol_use', 'parent_edu',
+                'sex', 'address', 'schoolsup', 'higher', 'internet']
+    target = 'G3'
 
-# Get feature names after one-hot encoding
-onehot_feature_names = model.named_steps['preprocessor'].transformers_[1][1].get_feature_names_out(categorical_cols)
-all_feature_names = numerical_cols + list(onehot_feature_names)
+    X = df[features]
+    y = df[target]
 
-# Get model coefficients
-coefficients = model.named_steps['regressor'].coef_
+    # Identify column types
+    numerical_cols = ['age', 'studytime', 'failures', 'G_avg', 'alcohol_use', 'parent_edu']
+    categorical_cols = ['sex', 'address', 'schoolsup', 'higher', 'internet']
 
-# Pair feature names with coefficients
-feature_importance = pd.DataFrame({
-    'Feature': all_feature_names,
-    'Coefficient': coefficients
-})
+    return X, y, numerical_cols, categorical_cols
 
-# Sort by absolute value of coefficients
-feature_importance['abs_coeff'] = feature_importance['Coefficient'].abs()
-feature_importance = feature_importance.sort_values(by='abs_coeff', ascending=False).drop(columns='abs_coeff')
+def create_pipeline(numerical_cols, categorical_cols, model_type='linear', degree=1, alpha=1.0):
+    # Column transformer for preprocessing
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', StandardScaler(), numerical_cols),
+            ('cat', OneHotEncoder(drop='first'), categorical_cols)
+        ])
 
-print(feature_importance)
+    # Choose model
+    if model_type == 'linear':
+        model = LinearRegression()
+    elif model_type == 'ridge':
+        model = Ridge(alpha=alpha)
+    elif model_type == 'lasso':
+        model = Lasso(alpha=alpha)
+    else:
+        raise ValueError("Invalid model_type. Choose 'linear', 'ridge', or 'lasso'.")
 
+    # Polynomial features if needed
+    if degree > 1:
+        pipeline = Pipeline(steps=[
+            ('preprocessor', preprocessor),
+            ('poly', PolynomialFeatures(degree=degree, include_bias=False)),
+            ('regressor', model)
+        ])
+    else:
+        pipeline = Pipeline(steps=[
+            ('preprocessor', preprocessor),
+            ('regressor', model)
+        ])
 
+    return pipeline
+
+def evaluate_model(model, X_test, y_test, y_pred):
+    mae = mean_absolute_error(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+
+    print("Model Evaluation:")
+    print(f"MAE: {mae:.2f}")
+    print(f"MSE: {mse:.2f}")
+    print(f"R2 Score: {r2:.2f}")
+
+    return mae, mse, r2
+
+def visualize_results(y_test, y_pred):
+    plt.figure(figsize=(8, 6))
+    sns.scatterplot(x=y_test, y=y_pred)
+    plt.plot([0, 20], [0, 20], color='red', linestyle='--')
+    plt.xlabel("Actual G3 Score")
+    plt.ylabel("Predicted G3 Score")
+    plt.title("Actual vs Predicted Final Grades")
+    plt.grid(True)
+    plt.show()
+
+def run_student_performance_pipeline(filepath, model_type='linear', degree=1, alpha=1.0):
+    # Load and preprocess data
+    X, y, numerical_cols, categorical_cols = load_and_preprocess_data(filepath)
+
+    # Train-test split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create pipeline
+    model = create_pipeline(numerical_cols, categorical_cols, model_type, degree, alpha)
+
+    # Train model
+    model.fit(X_train, y_train)
+
+    # Predict
+    y_pred = model.predict(X_test)
+
+    # Evaluate and visualize
+    evaluate_model(model, X_test, y_test, y_pred)
+    visualize_results(y_test, y_pred)
+
+if __name__ == "__main__":
+    # Example usage
+    run_student_performance_pipeline(
+        filepath="student-mat.csv",
+        model_type='ridge',       # Options: 'linear', 'ridge', 'lasso'
+        degree=2,                 # Polynomial degree (1 = no polynomial features)
+        alpha=1.0                 # Regularization strength for Ridge/Lasso
+    )
