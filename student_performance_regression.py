@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import shap
+import os
+from datetime import datetime
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import OneHotEncoder, PolynomialFeatures, StandardScaler
@@ -76,7 +78,24 @@ def evaluate_model(model, X_test, y_test, y_pred):
 
     return mae, mse, r2
 
-def visualize_results(y_test, y_pred):
+def log_results_to_csv(mae, mse, r2, model_type, degree, alpha, filepath="results_log.csv"):
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    row = {
+        "timestamp": timestamp,
+        "model_type": model_type,
+        "degree": degree,
+        "alpha": alpha,
+        "MAE": round(mae, 4),
+        "MSE": round(mse, 4),
+        "R2": round(r2, 4)
+    }
+
+    df = pd.DataFrame([row])
+    header = not os.path.exists(filepath)
+    df.to_csv(filepath, mode='a', header=header, index=False)
+    logging.info(f"Results saved to {filepath}")
+
+def visualize_results(y_test, y_pred, save=False, filename="plots/predictions.png"):
     plt.figure(figsize=(8, 6))
     sns.scatterplot(x=y_test, y=y_pred)
     plt.plot([0, 20], [0, 20], color='red', linestyle='--')
@@ -84,27 +103,61 @@ def visualize_results(y_test, y_pred):
     plt.ylabel("Predicted G3 Score")
     plt.title("Actual vs Predicted Final Grades")
     plt.grid(True)
-    plt.show()
 
-def visualize_feature_importance(model, X_train):
+    if save:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        plt.savefig(filename)
+        logging.info(f"Prediction plot saved to {filename}")
+    else:
+        plt.show()
+
+def visualize_feature_importance(model, X_train, degree, save=False, filename="plots/feature_importance.png"):
+    if degree > 1:
+        logging.warning("Skipping SHAP plot: not supported with PolynomialFeatures (degree > 1)")
+        try:
+            coefs = model.named_steps['regressor'].coef_
+            if 'poly' in model.named_steps:
+                feature_names = model.named_steps['poly'].get_feature_names_out(
+                    model.named_steps['preprocessor'].get_feature_names_out())
+            else:
+                feature_names = model.named_steps['preprocessor'].get_feature_names_out()
+            importance = pd.Series(coefs, index=feature_names)
+
+            plt.figure(figsize=(10, 6))
+            importance.plot(kind='barh')
+            plt.title("Feature Importance (Coefficient Magnitude)")
+            plt.tight_layout()
+            if save:
+                os.makedirs(os.path.dirname(filename), exist_ok=True)
+                plt.savefig(filename)
+                logging.info(f"Feature importance plot saved to {filename}")
+            else:
+                plt.show()
+        except Exception as e:
+            logging.warning(f"Fallback feature importance plot failed: {e}")
+        return
+
     try:
-        explainer = shap.Explainer(model.named_steps['regressor'], X_train)
-        shap_values = explainer(X_train)
-        shap.plots.beeswarm(shap_values)
+        X_transformed = model.named_steps['preprocessor'].transform(X_train)
+        explainer = shap.Explainer(model.named_steps['regressor'], X_transformed)
+        shap_values = explainer(X_transformed)
+        shap.plots.beeswarm(shap_values, show=False)
+
+        if save:
+            os.makedirs(os.path.dirname(filename), exist_ok=True)
+            plt.savefig(filename)
+            logging.info(f"SHAP plot saved to {filename}")
+        else:
+            plt.show()
     except Exception as e:
         logging.warning(f"SHAP visualization failed: {e}")
 
 def grid_search(X_train, y_train, numerical_cols, categorical_cols, model_type):
-    param_grid = {
-        'regressor__alpha': [0.01, 0.1, 1, 10, 100],
-    }
-
-    pipeline = build_model_pipeline(model_type=model_type, degree=1, alpha=1.0,
+    param_grid = {'regressor__alpha': [0.01, 0.1, 1, 10, 100]}
+    pipeline = build_model_pipeline(model_type, degree=1, alpha=1.0,
                                     numerical_cols=numerical_cols, categorical_cols=categorical_cols)
-
     search = GridSearchCV(pipeline, param_grid, cv=5, scoring='r2', n_jobs=-1)
     search.fit(X_train, y_train)
-
     logging.info(f"Best parameters: {search.best_params_}")
     return search.best_estimator_
 
@@ -115,6 +168,7 @@ def parse_args():
     parser.add_argument('--alpha', type=float, default=1.0)
     parser.add_argument('--filepath', type=str, default='dataset/student/student-mat.csv')
     parser.add_argument('--tune', action='store_true', help='Run GridSearchCV for hyperparameter tuning')
+    parser.add_argument('--save_plot', action='store_true', help='Save prediction and feature importance plots')
     return parser.parse_args()
 
 def main():
@@ -134,9 +188,11 @@ def main():
         model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)
-    evaluate_model(model, X_test, y_test, y_pred)
-    visualize_results(y_test, y_pred)
-    visualize_feature_importance(model, X_train)
+    mae, mse, r2 = evaluate_model(model, X_test, y_test, y_pred)
+    log_results_to_csv(mae, mse, r2, args.model_type, args.degree, args.alpha)
+
+    visualize_results(y_test, y_pred, save=args.save_plot)
+    visualize_feature_importance(model, X_train, args.degree, save=args.save_plot)
 
 if __name__ == "__main__":
     main()
