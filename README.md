@@ -1,63 +1,59 @@
 # Student Performance Prediction using Linear Regression
 
-This project builds a predictive model to estimate students' final grades in a math course based on their personal, social, and academic characteristics. It leverages linear regression techniques with enhancements like polynomial features and regularization.
+This project builds a predictive model to estimate students' final math grades using various linear regression techniques, enhanced with polynomial features, regularization, hyperparameter tuning, cross-validation, and SHAP-based model interpretability.
 
-## Project Highlights
+## Features
 
-- Linear, Polynomial, Ridge, and Lasso Regression models
-- Feature engineering and data preprocessing
-- Evaluation metrics: MAE, MSE, and R² Score
-- Visualization of actual vs predicted scores
-- Structured, reusable pipeline using scikit-learn
-- Function-based script for easy experimentation
+- Linear, Polynomial, Ridge, and Lasso Regression
+- Hyperparameter tuning with GridSearchCV
+- Cross-validation (5-fold)
+- SHAP visualizations for feature importance
+- Command-line arguments for flexible experimentation
+- Logging and modular design
 
 ## Dataset
 
-This project uses the [Student Performance Dataset](https://archive.ics.uci.edu/ml/datasets/Student+Performance) from the UCI Machine Learning Repository.
-
-- File used: `student-mat.csv` (math subject grades)
-- Target variable: `G3` (final grade)
-- 395 student records with 33 attributes
-
-## Features Used
-
-Numerical:
-- age
-- studytime
-- failures
-- G1 and G2 (first and second period grades, combined into G_avg)
-- alcohol_use (weekday + weekend consumption)
-- parent_edu (average of Medu and Fedu)
-
-Categorical:
-- sex
-- address
-- schoolsup
-- higher
-- internet
+- Source: [UCI Student Performance Dataset](https://archive.ics.uci.edu/ml/datasets/Student+Performance)
+- File: `student-mat.csv` (math grades only)
 
 ## Installation
 
-Clone the repository and install dependencies:
-
 ```bash
-git clone https://github.com/your-username/student-performance-regression.git
+git clone https://github.com/KonetiBalaji/Linear-Regression-for-Predective-Modeling.git
 cd student-performance-regression
 pip install -r requirements.txt
+```
+
+## Usage
+
+```bash
+# Basic training
+python student_performance_regression.py --model_type ridge --degree 2 --alpha 1.0
+
+# Run hyperparameter tuning
+python student_performance_regression.py --model_type ridge --tune
+```
 
 ## File Structure
-student-performance-regression/
-│
-├── student_performance_regression.py                      # Main script
-├── dataset\student\student-mat.csv                        # Dataset (math grades)
-├── requirements.txt                                       # Required Python packages
-└── README.md                                              # Project documentation
 
+```
+student-performance-regression/
+├── dataset/
+│   └── student/
+│       └── student-mat.csv
+├── student_performance_regression.py
+├── requirements.txt
+├── README.md
+└── LICENSE
+```
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ## Author
 
 **Balaji Koneti**  
-Master’s in Computer Science | Data Engineering | AI Engineering | NLP | ML  
+Master’s in Computer Science | Data Engineering | AI Engineering  
 [LinkedIn](https://www.linkedin.com/in/balajikoneti)  
 [GitHub](https://github.com/KonetiBalaji)
-
