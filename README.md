@@ -33,6 +33,15 @@ python student_performance_regression.py --model_type ridge --degree 2 --alpha 1
 # Run hyperparameter tuning
 python student_performance_regression.py --model_type ridge --tune
 ```
+# Save predictions and feature importance plots
+python student_performance_regression.py --model_type ridge --degree 2 --alpha 1.0 --save_plot
+
+## Outputs
+
+- `results_log.csv`: CSV log of model performance for each run
+- `plots/predictions.png`: Scatter plot of actual vs predicted scores (if `--save_plot` used)
+- `plots/feature_importance.png`: SHAP or coefficient-based feature importance plot
+
 
 ## File Structure
 
