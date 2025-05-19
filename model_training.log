@@ -1,0 +1,94 @@
+2025-05-18 23:13:00,182 - INFO - Loading and preprocessing data...
+2025-05-18 23:13:00,222 - INFO - Running GridSearchCV...
+2025-05-18 23:13:12,181 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:13:12,217 - INFO - MAE: 1.0005
+2025-05-18 23:13:12,217 - INFO - MSE: 1.9152
+2025-05-18 23:13:12,218 - INFO - RMSE: 1.3839
+2025-05-18 23:13:12,218 - INFO - R2: 0.8632
+2025-05-18 23:13:12,218 - INFO - Explained Variance: 0.8632
+2025-05-18 23:13:13,947 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:13:13,947 - INFO - CV Std R2: 0.0364
+2025-05-18 23:14:01,620 - INFO - Loading and preprocessing data...
+2025-05-18 23:14:01,647 - INFO - Running GridSearchCV...
+2025-05-18 23:14:13,374 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:14:13,411 - INFO - MAE: 1.0005
+2025-05-18 23:14:13,411 - INFO - MSE: 1.9152
+2025-05-18 23:14:13,412 - INFO - RMSE: 1.3839
+2025-05-18 23:14:13,412 - INFO - R2: 0.8632
+2025-05-18 23:14:13,412 - INFO - Explained Variance: 0.8632
+2025-05-18 23:14:15,197 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:14:15,197 - INFO - CV Std R2: 0.0364
+2025-05-18 23:14:20,933 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:14:21,005 - INFO - Model saved to models/best_model.joblib
+2025-05-18 23:14:44,206 - INFO - Loading and preprocessing data...
+2025-05-18 23:14:44,229 - INFO - Running GridSearchCV...
+2025-05-18 23:14:55,704 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:14:55,731 - INFO - MAE: 1.0005
+2025-05-18 23:14:55,731 - INFO - MSE: 1.9152
+2025-05-18 23:14:55,731 - INFO - RMSE: 1.3839
+2025-05-18 23:14:55,731 - INFO - R2: 0.8632
+2025-05-18 23:14:55,731 - INFO - Explained Variance: 0.8632
+2025-05-18 23:14:57,473 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:14:57,473 - INFO - CV Std R2: 0.0364
+2025-05-18 23:15:02,385 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:15:02,448 - INFO - Model saved to models/best_model.joblib
+2025-05-18 23:15:53,100 - INFO - Loading and preprocessing data...
+2025-05-18 23:15:53,128 - INFO - Running GridSearchCV...
+2025-05-18 23:16:04,306 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:16:04,333 - INFO - MAE: 1.0005
+2025-05-18 23:16:04,333 - INFO - MSE: 1.9152
+2025-05-18 23:16:04,333 - INFO - RMSE: 1.3839
+2025-05-18 23:16:04,333 - INFO - R2: 0.8632
+2025-05-18 23:16:04,334 - INFO - Explained Variance: 0.8632
+2025-05-18 23:16:06,067 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:16:06,082 - INFO - CV Std R2: 0.0364
+2025-05-18 23:16:10,933 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:16:10,993 - INFO - Model saved to models/best_model.joblib
+2025-05-18 23:17:15,543 - INFO - Loading and preprocessing data...
+2025-05-18 23:17:15,581 - INFO - Running GridSearchCV...
+2025-05-18 23:17:28,157 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:17:28,190 - INFO - MAE: 1.0005
+2025-05-18 23:17:28,190 - INFO - MSE: 1.9152
+2025-05-18 23:17:28,190 - INFO - RMSE: 1.3839
+2025-05-18 23:17:28,191 - INFO - R2: 0.8632
+2025-05-18 23:17:28,191 - INFO - Explained Variance: 0.8632
+2025-05-18 23:17:30,040 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:17:30,040 - INFO - CV Std R2: 0.0364
+2025-05-18 23:17:34,937 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:17:35,004 - INFO - Model saved to models/best_model.joblib
+2025-05-18 23:18:39,256 - INFO - Loading and preprocessing data...
+2025-05-18 23:18:39,285 - INFO - Running GridSearchCV...
+2025-05-18 23:18:51,554 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:18:51,583 - INFO - MAE: 1.0005
+2025-05-18 23:18:51,583 - INFO - MSE: 1.9152
+2025-05-18 23:18:51,583 - INFO - RMSE: 1.3839
+2025-05-18 23:18:51,583 - INFO - R2: 0.8632
+2025-05-18 23:18:51,584 - INFO - Explained Variance: 0.8632
+2025-05-18 23:18:53,303 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:18:53,303 - INFO - CV Std R2: 0.0364
+2025-05-18 23:18:58,179 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:18:58,250 - INFO - Model saved to models/best_model.joblib
+2025-05-18 23:19:54,587 - INFO - Loading and preprocessing data...
+2025-05-18 23:19:54,616 - INFO - Running GridSearchCV...
+2025-05-18 23:20:06,777 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:20:06,803 - INFO - MAE: 1.0005
+2025-05-18 23:20:06,803 - INFO - MSE: 1.9152
+2025-05-18 23:20:06,804 - INFO - RMSE: 1.3839
+2025-05-18 23:20:06,804 - INFO - R2: 0.8632
+2025-05-18 23:20:06,804 - INFO - Explained Variance: 0.8632
+2025-05-18 23:20:08,662 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:20:08,662 - INFO - CV Std R2: 0.0364
+2025-05-18 23:20:13,630 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:20:13,713 - INFO - Model saved to models/best_model.joblib
+2025-05-18 23:20:17,816 - INFO - Loading and preprocessing data...
+2025-05-18 23:20:17,844 - INFO - Running GridSearchCV...
+2025-05-18 23:20:29,799 - INFO - Best parameters: {'feature_selection__k': 'all', 'regressor__max_depth': 10, 'regressor__n_estimators': 200}
+2025-05-18 23:20:29,822 - INFO - MAE: 1.0005
+2025-05-18 23:20:29,822 - INFO - MSE: 1.9152
+2025-05-18 23:20:29,822 - INFO - RMSE: 1.3839
+2025-05-18 23:20:29,830 - INFO - R2: 0.8632
+2025-05-18 23:20:29,830 - INFO - Explained Variance: 0.8632
+2025-05-18 23:20:31,655 - INFO - CV Mean R2: 0.8561
+2025-05-18 23:20:31,655 - INFO - CV Std R2: 0.0364
+2025-05-18 23:20:36,735 - WARNING - SHAP visualization failed: Additivity check failed in TreeExplainer! Please ensure the data matrix you passed to the explainer is the same shape that the model was trained on. If your data shape is correct then please report this on GitHub. This check failed because for one of the samples the sum of the SHAP values was 0.403623, while the model output was 0.602121. If this difference is acceptable you can set check_additivity=False to disable this check.
+2025-05-18 23:20:36,798 - INFO - Model saved to models/best_model.joblib
